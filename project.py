@@ -9,6 +9,20 @@ from collections import deque
 import os
 import glob
 import PySimpleGUI as sg
+# import tensorflow as tf
+
+# import torch
+# from torchvision import datasets
+# import torchvision.transforms as transforms
+
+# from PIL import Image
+# import PIL
+# import torch.nn as nn
+# import torch.nn.functional as F
+
+# Load the pre-trained digit recognition model
+# model = tf.keras.models.load_model('path_to_your_trained_model')
+# model = tf.keras.models.load_model('mo')
 
 # lang_list=['Devanagari','English']
 lang_list=['Bengali','Devanagari','English','Gujarati','Gurumukhi','Kannada','Malayalam','Manipuri','Oriya','Tamil','Telugu','urdu']
@@ -332,6 +346,31 @@ while ret:
     
     imgbytes = cv2.imencode('.png',frame)[1].tobytes()
     window['-IMAGE-'].update(data = imgbytes)
+
+# def predictCharacter(roi,model):
+# 	img = cv2.resize(roi, (28, 28)) 
+# 	img = cv2.GaussianBlur(img,(3,3),0)
+# 	img = Image.fromarray(img)
+# 	#img = PIL.ImageOps.invert(img)
+
+# 	normalize = transforms.Normalize(
+# 	   mean=[0.5,0.5,0.5],
+# 	   std=[0.5,0.5,0.5]
+# 	)
+# 	preprocess = transforms.Compose([
+# 	    transforms.Resize((28,28)),
+# 	    transforms.ToTensor(),
+# 	    normalize
+# 	])
+
+# 	p_img = preprocess(img)
+
+# 	model.eval()
+# 	p_img = p_img.reshape([1,1,28,28]).float()
+# 	output = model(torch.transpose(p_img,2,3))
+# 	_, preds_tensor = torch.max(output, 1)
+# 	preds = np.squeeze(preds_tensor.numpy())
+# 	return preds
 
     # update the text
 # release the webcam and destroy all active windows
