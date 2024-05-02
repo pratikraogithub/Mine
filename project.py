@@ -9,20 +9,6 @@ from collections import deque
 import os
 import glob
 import PySimpleGUI as sg
-# import tensorflow as tf
-
-# import torch
-# from torchvision import datasets
-# import torchvision.transforms as transforms
-
-# from PIL import Image
-# import PIL
-# import torch.nn as nn
-# import torch.nn.functional as F
-
-# Load the pre-trained digit recognition model
-# model = tf.keras.models.load_model('path_to_your_trained_model')
-# model = tf.keras.models.load_model('mo')
 
 # lang_list=['Devanagari','English']
 lang_list=['Bengali','Devanagari','English','Gujarati','Gurumukhi','Kannada','Malayalam','Manipuri','Oriya','Tamil','Telugu','urdu']
@@ -347,33 +333,45 @@ while ret:
     imgbytes = cv2.imencode('.png',frame)[1].tobytes()
     window['-IMAGE-'].update(data = imgbytes)
 
-# def predictCharacter(roi,model):
-# 	img = cv2.resize(roi, (28, 28)) 
-# 	img = cv2.GaussianBlur(img,(3,3),0)
-# 	img = Image.fromarray(img)
-# 	#img = PIL.ImageOps.invert(img)
-
-# 	normalize = transforms.Normalize(
-# 	   mean=[0.5,0.5,0.5],
-# 	   std=[0.5,0.5,0.5]
-# 	)
-# 	preprocess = transforms.Compose([
-# 	    transforms.Resize((28,28)),
-# 	    transforms.ToTensor(),
-# 	    normalize
-# 	])
-
-# 	p_img = preprocess(img)
-
-# 	model.eval()
-# 	p_img = p_img.reshape([1,1,28,28]).float()
-# 	output = model(torch.transpose(p_img,2,3))
-# 	_, preds_tensor = torch.max(output, 1)
-# 	preds = np.squeeze(preds_tensor.numpy())
-# 	return preds
-
     # update the text
 # release the webcam and destroy all active windows
-cap.release()
-cv2.destroyAllWindows()
+# cap.release()
+# cv2.destroyAllWindows()
 
+
+def main():
+    # Define your initial variables and parameters here, if needed
+
+    # Initialize the webcam
+    cap = cv2.VideoCapture(0)
+    print("Camera ON")
+
+    ret = True
+    while ret:
+        event, values = window.read(timeout=0)
+        if event == sg.WIN_CLOSED:
+            break
+
+        # Read each frame from the webcam
+        ret, frame = cap.read()
+        current_lang = values['-lang_name-']
+        current_digit = values['-digit_value-']
+
+        # Check if the language or digit value has changed
+        if (current_lang != previous_lang) or (current_digit != previous_digit):
+            set_fname_digit()
+            previous_lang = current_lang
+            previous_digit = current_digit
+            print("Capturing data for digit {0} in {1}".format(digit, folder_name))
+
+        # Your image processing and drawing code goes here
+
+        # Display the frame with PySimpleGUI
+        imgbytes = cv2.imencode('.png', frame)[1].tobytes()
+        window['-IMAGE-'].update(data=imgbytes)
+
+        # Check for key presses and handle accordingly
+
+    # Release the webcam and destroy all active windows
+    cap.release()
+    cv2.destroyAllWindows()
